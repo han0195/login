@@ -35,6 +35,12 @@ public class MemberController {
         return result;
     }
 
+    @GetMapping("/info")
+    @ResponseBody
+    public String memberinfo(){
+        return memberService.인증된회원아이디호출();
+    }
+
 }
 
 

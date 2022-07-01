@@ -17,9 +17,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {//웹 시큐�
         // HTTP(URL) 관련 시큐리티 보안
         http //   http
                 .authorizeHttpRequests()                                    //인증요청
-                .antMatchers("/admin/**").hasRole("ADMIN")      // 어드민접근 가능 URL
-                .antMatchers("/member/info").hasRole("MEMBER")  // 중개자 접근 가능 URL
-                .antMatchers("/board/save") .hasRole("MEMBER")  // 멤버 접근가능 URL
                 .antMatchers( "/**" ).permitAll()               //  모든 접근 허용
                 .and()
                 ////////////////////////////////////// 로그인 요청/////////////////////////////////////////////////////
@@ -35,13 +32,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {//웹 시큐�
                 .logoutRequestMatcher(new AntPathRequestMatcher("/member/logout"))// 로그아웃 접근 URL
                 .logoutSuccessUrl("/")                                                  //로그아웃 성공시
                 .invalidateHttpSession(true)                                            //세션초기화
-                .and()//////////////////////////////////회원가입/////////////////////////////////////////////////////
+                .and()//////////////////////////////////예외처리/////////////////////////////////////////////////////
                 .csrf()                                                                 // 예외처리???
                 .ignoringAntMatchers("/member/logincontroller")             // 해당 URL 접근 예외
                 .ignoringAntMatchers("/member/signup")
                 .and()////////////////////////////////////공통///////////////////////////////////////////////////
                 .exceptionHandling()                                                    // 오류페이지 발생시 시큐리티 페이지 전환
-                .accessDeniedPage("/error");
+                .accessDeniedPage("/error")
+                .and()///////////////////////ouath2////////////////////////////////////////////////
+                .oauth2Login()// ouath2 접근하면
+                .userInfoEndpoint()//서버접근
+                .userService(memberService); // member서비스 의 값을 받겠다.
+
 
     }
         @Autowired
